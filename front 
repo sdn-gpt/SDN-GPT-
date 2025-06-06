@@ -1,0 +1,33 @@
+import React, { useState } from "react";
+
+function App() {
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
+
+  async function handleChat() {
+    const res = await fetch("http://localhost:10000/chat/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
+    const data = await res.json();
+    setResponse(data.response);
+  }
+
+  return (
+    <div style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
+      <h1>SDN GPT Chat</h1>
+      <textarea
+        rows={5}
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        placeholder="Write your prompt here..."
+        style={{ width: "100%" }}
+      />
+      <button onClick={handleChat}>Send</button>
+      <pre style={{ whiteSpace: "pre-wrap", marginTop: 20 }}>{response}</pre>
+    </div>
+  );
+}
+
+export default App;
